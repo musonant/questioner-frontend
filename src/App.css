@@ -81,6 +81,23 @@ a:hover {
   height: auto;
 }
 
+.err-msg:empty {
+  height: 0;
+  width: 0;
+  margin: 0;
+  padding: 0;
+  transition: all 300ms ease;
+}
+.err-msg {
+  background-color: #fff6f6;
+  color: #9f3a38;
+  font-size: 14px;
+  padding: 10px;
+  border: 1px solid #9f3a38a3;
+  margin-bottom: 5px;
+  border-radius: 3px;
+}
+
 .underline {
   text-decoration: underline;
 }
@@ -477,10 +494,12 @@ textarea:focus {
   opacity: 1;
 }
 #signin-form.active {
-  height: 180px;
+  /* height: 180px; */
+  height: auto;
 }
 #signup-form.active {
-  height: 383px;
+  /* height: 383px; */
+  height: auto;
 }
 
 /* ----------------------------- */

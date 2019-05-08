@@ -28,12 +28,9 @@ class AuthenticationPage extends Component {
             </Link>
           </div>
           <div className="form-area">
-            <form action="" id="signin-form" className={`form ${loginStatus}`}>
-              <LoginForm />
-            </form>
-            <form action="" id="signup-form" className={`form ${signupStatus}`}>
-              <SignupForm />
-            </form>
+            <LoginForm loginStatus={loginStatus} />
+
+            <SignupForm signupStatus={signupStatus} />
           </div>
         </div>
 
