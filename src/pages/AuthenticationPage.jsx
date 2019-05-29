@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import { Link } from 'react-router-dom';
+import PropTypes from 'prop-types';
 
 import Header from '../components/Header';
 import Footer from '../components/Footer';
@@ -28,12 +29,12 @@ class AuthenticationPage extends Component {
             </Link>
           </div>
           <div className="form-area">
-            <form action="" id="signin-form" className={`form ${loginStatus}`}>
-              <LoginForm />
-            </form>
-            <form action="" id="signup-form" className={`form ${signupStatus}`}>
-              <SignupForm />
-            </form>
+            <LoginForm loginStatus={loginStatus} history={this.props.history} />
+
+            <SignupForm
+              signupStatus={signupStatus}
+              history={this.props.history}
+            />
           </div>
         </div>
 
@@ -42,5 +43,9 @@ class AuthenticationPage extends Component {
     );
   }
 }
+
+AuthenticationPage.propTypes = {
+  history: PropTypes.object.isRequired,
+};
 
 export default AuthenticationPage;
