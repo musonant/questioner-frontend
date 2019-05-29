@@ -1,26 +1,29 @@
 import React, { Component } from 'react';
 import SimpleReactValidator from 'simple-react-validator';
+import PropTypes from 'prop-types';
 
 class LoginForm extends Component {
   state = {
     email: '',
-    password: ''
+    password: '',
   };
 
   validator = new SimpleReactValidator({
-    element: message => <div>{message}</div>
+    element: message => <div>{message}</div>,
   });
 
   onChange = e => {
-    this.validator.showMessages();
-
     this.setState({
-      [e.target.name]: e.target.value
+      [e.target.name]: e.target.value,
     });
   };
 
-  onSubmit = e => {
+  formSubmitHandler = e => {
     e.preventDefault();
+    this.validator.showMessages();
+    this.setState({
+      ...this.state,
+    });
 
     if (!this.validator.allValid()) {
       return false;
@@ -28,9 +31,8 @@ class LoginForm extends Component {
 
     const credentials = {
       email: this.state.email,
-      password: this.state.password
+      password: this.state.password,
     };
-    console.log('success');
   };
 
   render() {
@@ -38,7 +40,7 @@ class LoginForm extends Component {
 
     return (
       <form
-        onSubmit={this.onSubmit}
+        onSubmit={this.formSubmitHandler}
         id="signin-form"
         className={`form ${loginStatus}`}
       >
@@ -61,7 +63,7 @@ class LoginForm extends Component {
           {this.validator.message(
             'password',
             this.state.password,
-            'required|min:6'
+            'required|min:6',
           )}
         </div>
         <input type="submit" value="Login" />
@@ -69,5 +71,9 @@ class LoginForm extends Component {
     );
   }
 }
+
+LoginForm.propTypes = {
+  loginStatus: PropTypes.string.isRequired,
+};
 
 export default LoginForm;

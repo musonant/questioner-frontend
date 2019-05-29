@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import SimpleReactValidator from 'simple-react-validator';
+import PropTypes from 'prop-types';
 
 class SignupForm extends Component {
   state = {
@@ -7,26 +8,28 @@ class SignupForm extends Component {
     lastname: '',
     email: '',
     password: '',
-    confirmPassword: ''
+    confirmPassword: '',
   };
 
   validator = new SimpleReactValidator({
     element: message => <div>{message}</div>,
     messages: {
-      in: "The passwords don't match."
-    }
+      in: "The passwords don't match.",
+    },
   });
 
   onChange = e => {
-    this.validator.showMessages();
-
     this.setState({
-      [e.target.name]: e.target.value
+      [e.target.name]: e.target.value,
     });
   };
 
-  onSubmit = e => {
+  formSubmitHandler = e => {
     e.preventDefault();
+    this.validator.showMessages();
+    this.setState({
+      ...this.state,
+    });
 
     if (!this.validator.allValid()) {
       return false;
@@ -37,7 +40,7 @@ class SignupForm extends Component {
       password: this.state.password,
       firstname: this.state.firstname,
       lastname: this.state.lastname,
-      confirmPassword: this.state.confirmPassword
+      confirmPassword: this.state.confirmPassword,
     };
     console.log(credentials);
   };
@@ -45,7 +48,11 @@ class SignupForm extends Component {
   render() {
     const { signupStatus } = this.props;
     return (
-      <form action="" id="signup-form" className={`form ${signupStatus}`}>
+      <form
+        onSubmit={this.formSubmitHandler}
+        id="signup-form"
+        className={`form ${signupStatus}`}
+      >
         <input
           type="text"
           placeholder="first name"
@@ -86,23 +93,23 @@ class SignupForm extends Component {
           {this.validator.message(
             'firstname',
             this.state.firstname,
-            'required|alpha_space'
+            'required|alpha_space',
           )}
           {this.validator.message(
             'lastname',
             this.state.lastname,
-            'required|alpha_space'
+            'required|alpha_space',
           )}
           {this.validator.message('email', this.state.email, 'required|email')}
           {this.validator.message(
             'password',
             this.state.password,
-            'required|min:6'
+            'required|min:6',
           )}
           {this.validator.message(
             'confirmPassword',
             this.state.confirmPassword,
-            `required|in:${this.state.password}`
+            `required|in:${this.state.password}`,
           )}
         </div>
 
@@ -111,5 +118,9 @@ class SignupForm extends Component {
     );
   }
 }
+
+SignupForm.propTypes = {
+  signupStatus: PropTypes.string.isRequired,
+};
 
 export default SignupForm;
