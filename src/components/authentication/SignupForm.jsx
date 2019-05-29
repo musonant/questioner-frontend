@@ -1,6 +1,9 @@
 import React, { Component } from 'react';
 import SimpleReactValidator from 'simple-react-validator';
 import PropTypes from 'prop-types';
+import { connect } from 'react-redux';
+
+import { signupUser } from '../../store/modules/auth';
 
 class SignupForm extends Component {
   state = {
@@ -24,7 +27,7 @@ class SignupForm extends Component {
     });
   };
 
-  formSubmitHandler = e => {
+  formSubmitHandler = async e => {
     e.preventDefault();
     this.validator.showMessages();
     this.setState({
@@ -40,9 +43,17 @@ class SignupForm extends Component {
       password: this.state.password,
       firstname: this.state.firstname,
       lastname: this.state.lastname,
-      confirmPassword: this.state.confirmPassword,
     };
-    console.log(credentials);
+
+    await this.props.signupUser(credentials);
+
+    if (this.props.auth.currentUser.id) {
+      this.redirect();
+    }
+  };
+
+  redirect = () => {
+    this.props.history.push('/');
   };
 
   render() {
@@ -93,12 +104,12 @@ class SignupForm extends Component {
           {this.validator.message(
             'firstname',
             this.state.firstname,
-            'required|alpha_space',
+            'alpha_space',
           )}
           {this.validator.message(
             'lastname',
             this.state.lastname,
-            'required|alpha_space',
+            'alpha_space',
           )}
           {this.validator.message('email', this.state.email, 'required|email')}
           {this.validator.message(
@@ -111,6 +122,9 @@ class SignupForm extends Component {
             this.state.confirmPassword,
             `required|in:${this.state.password}`,
           )}
+          {this.props.errorMessage !== '' && (
+            <span>{this.props.errorMessage}</span>
+          )}
         </div>
 
         <input type="submit" value="Register" />
@@ -121,6 +135,18 @@ class SignupForm extends Component {
 
 SignupForm.propTypes = {
   signupStatus: PropTypes.string.isRequired,
+  signupUser: PropTypes.func,
+  errorMessage: PropTypes.string,
+  history: PropTypes.object.isRequired,
+  auth: PropTypes.object.isRequired,
 };
 
-export default SignupForm;
+const mapStateToProps = state => ({
+  auth: state.auth,
+  errorMessage: state.auth.errorMessage,
+});
+
+export default connect(
+  mapStateToProps,
+  { signupUser },
+)(SignupForm);

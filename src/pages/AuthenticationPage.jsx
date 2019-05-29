@@ -29,9 +29,12 @@ class AuthenticationPage extends Component {
             </Link>
           </div>
           <div className="form-area">
-            <LoginForm loginStatus={loginStatus} />
+            <LoginForm loginStatus={loginStatus} history={this.props.history} />
 
-            <SignupForm signupStatus={signupStatus} />
+            <SignupForm
+              signupStatus={signupStatus}
+              history={this.props.history}
+            />
           </div>
         </div>
 
@@ -42,7 +45,7 @@ class AuthenticationPage extends Component {
 }
 
 AuthenticationPage.propTypes = {
-  location: PropTypes.string.isRequired,
+  history: PropTypes.object.isRequired,
 };
 
 export default AuthenticationPage;

@@ -1,32 +1,36 @@
 import { setToken } from '../../api/helpers';
+import { signUpRequest, loginRequest } from '../../api/auth';
 
 export const SIGNUP_SUCCESS = 'SIGNUP_SUCCESS';
 export const SIGNUP_FAILURE = 'SIGNUP_FAILURE';
-// export const SIGNUP_PROCESSING = 'SIGNUP_PROCESSING';
 export const LOGIN_FAILURE = 'LOGIN_FAILURE';
 export const LOGIN_SUCCESS = 'LOGIN_SUCCESS';
-// export const LOGIN_PROCESSING = 'LOGIN_PROCESSING';
 export const REQUEST_PROCESSING = 'LOGIN_PROCESSING';
 
 const initialState = {
   isLoading: false,
-  errors: [],
+  errorMessage: '',
+  currentUser: {},
 };
 
-const signupSuccess = () => ({
-  SIGNUP_SUCCESS,
+const signupSuccess = userData => ({
+  type: SIGNUP_SUCCESS,
+  userData,
 });
-const signupFailure = () => ({
-  SIGNUP_SUCCESS,
+const signupFailure = error => ({
+  type: SIGNUP_FAILURE,
+  error,
 });
-const loginSuccess = () => ({
-  LOGIN_SUCCESS,
+const loginSuccess = userData => ({
+  type: LOGIN_SUCCESS,
+  userData,
 });
-const loginFailure = () => ({
-  LOGIN_FAILURE,
+const loginFailure = error => ({
+  type: LOGIN_FAILURE,
+  error,
 });
 const requestProcessing = () => ({
-  SIGNUP_SUCCESS,
+  type: REQUEST_PROCESSING,
 });
 
 export const loginUser = userData => {
@@ -34,15 +38,11 @@ export const loginUser = userData => {
     try {
       dispatch(requestProcessing());
       const { data } = await loginRequest(userData);
-      localStorage.setItem(
-        'authenticatedUser',
-        JSON.stringify(data.data.authenticatedUser),
-      );
-      setToken(data.data.token);
-      dispatch(loginSuccess(data));
+      setToken(data.data[0].token);
+      dispatch(loginSuccess(data.data[0].user));
     } catch (error) {
       const { data } = error.response;
-      dispatch(loginFailure([data]));
+      dispatch(loginFailure(data.error));
     }
   };
 };
@@ -52,10 +52,12 @@ export const signupUser = userData => {
     try {
       dispatch(requestProcessing());
       const { data } = await signUpRequest(userData);
-      dispatch(signupSuccess(data));
+      const { user } = data.data[0];
+      setToken(data.data[0].token);
+      dispatch(signupSuccess(user));
     } catch (error) {
       const { data } = error.response;
-      dispatch(signupFailure([data]));
+      dispatch(signupFailure(data.error));
     }
   };
 };
@@ -71,24 +73,27 @@ export const authReducer = (state = initialState, action) => {
       return {
         ...state,
         isLoading: false,
-        errors: action.errors,
+        errorMessage: action.error,
       };
     case LOGIN_SUCCESS:
       return {
         ...state,
         isLoading: false,
-        errorResponse: [],
+        currentUser: action.userData,
       };
     case SIGNUP_FAILURE:
       return {
         ...state,
         isLoading: false,
-        errors: action.errors,
+        errorMessage: action.error,
       };
     case SIGNUP_SUCCESS:
       return {
         ...state,
         isLoading: false,
+        currentUser: action.userData,
       };
+    default:
+      return state;
   }
 };

@@ -1,6 +1,9 @@
 import React, { Component } from 'react';
 import SimpleReactValidator from 'simple-react-validator';
 import PropTypes from 'prop-types';
+import { connect } from 'react-redux';
+
+import { loginUser } from '../../store/modules/auth';
 
 class LoginForm extends Component {
   state = {
@@ -18,7 +21,7 @@ class LoginForm extends Component {
     });
   };
 
-  formSubmitHandler = e => {
+  formSubmitHandler = async e => {
     e.preventDefault();
     this.validator.showMessages();
     this.setState({
@@ -33,6 +36,16 @@ class LoginForm extends Component {
       email: this.state.email,
       password: this.state.password,
     };
+
+    await this.props.loginUser(credentials);
+
+    if (this.props.auth.currentUser.id) {
+      this.redirect();
+    }
+  };
+
+  redirect = () => {
+    this.props.history.push('/');
   };
 
   render() {
@@ -74,6 +87,18 @@ class LoginForm extends Component {
 
 LoginForm.propTypes = {
   loginStatus: PropTypes.string.isRequired,
+  loginUser: PropTypes.func,
+  errorMessage: PropTypes.string,
+  history: PropTypes.object.isRequired,
+  auth: PropTypes.object.isRequired,
 };
 
-export default LoginForm;
+const mapStateToProps = state => ({
+  auth: state.auth,
+  errorMessage: state.auth.errorMessage,
+});
+
+export default connect(
+  mapStateToProps,
+  { loginUser },
+)(LoginForm);
