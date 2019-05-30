@@ -76,7 +76,7 @@ class LoginForm extends Component {
           {this.validator.message(
             'password',
             this.state.password,
-            'required|min:6',
+            'required|min:6|alpha_num',
           )}
         </div>
         <input type="submit" value="Login" />

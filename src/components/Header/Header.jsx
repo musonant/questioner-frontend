@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import { Link } from 'react-router-dom';
 
 class Header extends Component {
   state = {};
@@ -6,9 +7,19 @@ class Header extends Component {
   render() {
     return (
       <header className="main-header row">
-        <div className="header-brand">
-          <h3 className="title">Questioner</h3>
-        </div>
+        <Link to="/">
+          <div className="header-brand">
+            <h3 className="title">Questioner</h3>
+          </div>
+        </Link>
+        <ul className="horizontal-nav nav-links">
+          <Link className="item" to="/login">
+            Login
+          </Link>
+          <Link className="item" to="/signup">
+            Sign Up
+          </Link>
+        </ul>
         <div className="menu-toggle">
           <i className="menu-btn fa fa-bars" />
           <div className="menu-content">
