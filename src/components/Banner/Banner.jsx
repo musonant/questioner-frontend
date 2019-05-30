@@ -1,9 +1,13 @@
 import React from 'react';
 import '../../App.css';
+import BackgroundImage from '../../assets/img/landing-banner.jpg';
 
 export const Banner = () => {
   return (
-    <div className="main-banner with-back-img">
+    <div
+      className="main-banner with-back-img"
+      style={{ backgroundImage: `url(${BackgroundImage})` }}
+    >
       <div className="overlay" />
       <div className="content">
         <h1 className="title">The Meetup Questioner</h1>

@@ -276,7 +276,6 @@ textarea:focus {
 /* ------------------------- */
 #landing-page .main-banner {
   position: relative;
-  background-image: url('./assets/img/landing-banner.jpg');
   z-index: -60;
 }
 #landing-page .main-banner .content {
