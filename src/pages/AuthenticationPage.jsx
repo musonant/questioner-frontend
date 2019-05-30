@@ -2,8 +2,8 @@ import React, { Component } from 'react';
 import { Link } from 'react-router-dom';
 import PropTypes from 'prop-types';
 
-import Header from '../components/Header';
-import Footer from '../components/Footer';
+import Header from '../components/Header/Header';
+import Footer from '../components/Footer/Footer';
 import LoginForm from '../components/authentication/LoginForm';
 import SignupForm from '../components/authentication/SignupForm';
 
@@ -46,6 +46,7 @@ class AuthenticationPage extends Component {
 
 AuthenticationPage.propTypes = {
   history: PropTypes.object.isRequired,
+  location: PropTypes.object.isRequired,
 };
 
 export default AuthenticationPage;

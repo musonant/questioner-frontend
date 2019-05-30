@@ -115,7 +115,7 @@ class SignupForm extends Component {
           {this.validator.message(
             'password',
             this.state.password,
-            'required|min:6',
+            'required|min:6|alpha_num',
           )}
           {this.validator.message(
             'confirmPassword',
